@@ -1,40 +1,33 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Registrace</title>
+	<title>Přihlášení</title>
 </head>
 <body>
-	<u><h1>Registrace</h1></u>
+	<?php echo file_get_contents("zahlavi.html"); ?>
+	<u><h1>Přihlášení</h1></u>
 	<form method="post">
-		<b>Jméno: </b> <input type="text" name="jmeno" /><br>
-		<b>Heslo: </b> <input type="password" name="heslo" /><br>
-		<b>Heslo znova: </b> <input type="password" name="pheslo" /><br>
-		<input type="submit" value="Registrovat" name="s" />
+	<table>
+		<tr><td>Jméno: </td><td><input type="text" name="jmeno" /></td></tr>
+		<tr><td>Heslo: </td><td><input type="password" name="heslo" /></td></tr>
+	</table>
+	<input type="submit" name="s" value="Přihlásit" />
 	</form>
 <?php
+include "udb.php";
 if(isset($_POST["s"])){
-	if(!isset($_POST["jmeno"]) || $_POST["jmeno"]=="" ||
-	   !isset($_POST["heslo"]) || $_POST["heslo"]=="" ||
-	   !isset($_POST["pheslo"]) || $_POST["pheslo"]=="" ) {
-	   	echo "<b>Zadejte jméno a heslo</b>";
+	$d=ctiDb("ucty.txt");
+	if(kontrolujUnikatnost($d,$_POST["jmeno"])){
+		echo "<b>Účet s takovým jménem neexistuje";
 		die();
 	}
-	if(!preg_match("/^[a-žA-Ž]+$/",$_POST["jmeno"])){
-		echo "<b>Jméno může obsahovat jen písmena!</b>";
-		die();
+	if(ctiDb("ucty.txt")[$_POST["jmeno"]]===$_POST["heslo"]){
+		header("location: https://http.cat/");
 	}
-	if(!preg_match("/^[a-žA-Ž0-9]+$/",$_POST["heslo"]) && strlen($_POST["heslo"])>=5){
-		echo "<b>Heslo musí být delší než 5 znaků a jen malá a velká písmena a číslice jsou povolena!</b>";
-		die();
+	else{
+		echo "<b>Špatně zadané heslo</b>";
 	}
-	if($_POST["heslo"]!==$_POST["pheslo"]){
-		echo "<b>Hesla se neshodují</b>";
-		die();
-	}
-	echo "<h2>Funguje ty hade!</h2>";
-	
 }
 
 ?>
-</body>
-</head>
+
