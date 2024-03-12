@@ -16,12 +16,14 @@
 <?php
 include "udb.php";
 if(isset($_POST["s"])){
+	$jm=trim(htmlspecialchars($_POST["jmeno"]));
+	$he=trim(htmlspecialchars($_POST["heslo"]));
 	$d=ctiDb("ucty.txt");
-	if(kontrolujUnikatnost($d,$_POST["jmeno"])){
+	if(kontrolujUnikatnost($d,$jm)){
 		echo "<b>Účet s takovým jménem neexistuje";
 		die();
 	}
-	if(ctiDb("ucty.txt")[$_POST["jmeno"]]===$_POST["heslo"]){
+	if(ctiDb("ucty.txt")[$jm]===$he){
 		header("location: https://http.cat/");
 	}
 	else{
